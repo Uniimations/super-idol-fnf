@@ -59,33 +59,24 @@ class CreditsState extends MusicBeatState
 				}
 			}
 		}
-		
+
 		#end
 		var pisspoop = [ //Name - Icon name - Description - Link - BG Color
+		['Super Idol Team Credits'],
+		['Uniimations', 'uniimations', 'Director, Sprite & Credit Icon Artist, Musician, Programmer', 'https://twitter.com/UniiAnimates', '0xFFFF00BA'],
+		['Potionion', 'potionion', 'Artist for Cover art, GF resprite, Background, Icon, & Rating Pop Up', 'https://twitter.com/Potionion', '0xFFC3C3C3'],
+		['Cerbera', 'cerbera', 'Charter for all Super Idol difficulties', 'https://www.youtube.com/c/Cerberaa', '0xFF572B57'],
+		['Diples', 'diples', 'Mod Idea', 'https://twitter.com/imdiples', '0xFFFFFFFF'],
+		[''],
 		['Psych Engine Team'],
 		['Shadow Mario',		'shadowmario',		'Main Programmer of Psych Engine',					'https://twitter.com/Shadow_Mario_',	'0xFFFFDD33'],
-		['RiverOaken',			'riveroaken',		'Main Artist/Animator of Psych Engine',				'https://twitter.com/river_oaken',		'0xFFC30085'],
-		[''],
-		['Engine Contributors'],
-		['shubs',				'shubs',			'New Input System Programmer',						'https://twitter.com/yoshubs',			'0xFF4494E6'],
-		['PolybiusProxy',		'polybiusproxy',	'.MP4 Video Loader Extension',						'https://twitter.com/polybiusproxy',	'0xFFE01F32'],
-		['gedehari',			'gedehari',			'Chart Editor\'s Sound Waveform base',				'https://twitter.com/gedehari',			'0xFFFF9300'],
-		['Keoiki',				'keoiki',			'Note Splash Animations',							'https://twitter.com/Keoiki_',			'0xFFFFFFFF'],
-		['SandPlanet',			'sandplanet',		'Mascot\'s Owner\nMain Supporter of the Engine',		'https://twitter.com/SandPlanetNG',	'0xFFD10616'],
-		['bubba',				'bubba',		'Guest Composer for "Hot Dilf"',	'https://www.youtube.com/channel/UCxQTnLmv0OAS63yzk9pVfaw',	'0xFF61536A'],
-		[''],
-		["Funkin' Crew"],
-		['ninjamuffin99',		'ninjamuffin99',	"Programmer of Friday Night Funkin'",				'https://twitter.com/ninja_muffin99',	'0xFFF73838'],
-		['PhantomArcade',		'phantomarcade',	"Animator of Friday Night Funkin'",					'https://twitter.com/PhantomArcade3K',	'0xFFFFBB1B'],
-		['evilsk8r',			'evilsk8r',			"Artist of Friday Night Funkin'",					'https://twitter.com/evilsk8r',			'0xFF53E52C'],
-		['kawaisprite',			'kawaisprite',		"Composer of Friday Night Funkin'",					'https://twitter.com/kawaisprite',		'0xFF6475F3']
+		['RiverOaken',			'riveroaken',		'Main Artist/Animator of Psych Engine',				'https://twitter.com/RiverOaken',		'0xFFC30085']
 	];
-		
-		
-				for(i in pisspoop){
-					creditsStuff.push(i);
-				}
-			
+
+		for(i in pisspoop){
+			creditsStuff.push(i);
+		}
+
 		for (i in 0...creditsStuff.length)
 		{
 			var isSelectable:Bool = !unselectableCheck(i);

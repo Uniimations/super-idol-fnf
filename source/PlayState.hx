@@ -125,6 +125,9 @@ class PlayState extends MusicBeatState
 	public var gf:Character;
 	public var boyfriend:Boyfriend;
 
+	public var isDad:Bool = false;
+	public var isGF:Bool = false;
+
 	public var notes:FlxTypedGroup<Note>;
 	public var unspawnNotes:Array<Note> = [];
 	public var eventNotes:Array<Dynamic> = [];
@@ -205,6 +208,9 @@ class PlayState extends MusicBeatState
 	var bottomBoppers:BGSprite;
 	var santa:BGSprite;
 	var heyTimer:Float;
+
+	var artists:BGSprite;
+	var cerboro:BGSprite;
 
 	var bgGirls:BackgroundGirls;
 	var wiggleShit:WiggleEffect = new WiggleEffect();
@@ -356,30 +362,18 @@ class PlayState extends MusicBeatState
 
 		switch (curStage)
 		{
-			case 'stage': //Week 1
-				var bg:BGSprite = new BGSprite('stageback', -600, -200, 0.9, 0.9);
-				add(bg);
-
-				var stageFront:BGSprite = new BGSprite('stagefront', -650, 600, 0.9, 0.9);
-				stageFront.setGraphicSize(Std.int(stageFront.width * 1.1));
-				stageFront.updateHitbox();
-				add(stageFront);
+			case 'stage': //SUPER IDOL
+				var floor:BGSprite = new BGSprite('super-idol/floor', -435.05, -86.5, 1, 1);
+				floor.updateHitbox();
+				add(floor);
 
 				if(!ClientPrefs.lowQuality) {
-					var stageLight:BGSprite = new BGSprite('stage_light', -125, -100, 0.9, 0.9);
-					stageLight.setGraphicSize(Std.int(stageLight.width * 1.1));
-					stageLight.updateHitbox();
-					add(stageLight);
-					var stageLight:BGSprite = new BGSprite('stage_light', 1225, -100, 0.9, 0.9);
-					stageLight.setGraphicSize(Std.int(stageLight.width * 1.1));
-					stageLight.updateHitbox();
-					stageLight.flipX = true;
-					add(stageLight);
+					artists = new BGSprite('super-idol/the_artist_people', 1229.35, 262.85, 1, 1, ['my buttox']);
+					artists.updateHitbox();
+					add(artists);
 
-					var stageCurtains:BGSprite = new BGSprite('stagecurtains', -500, -300, 1.3, 1.3);
-					stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 0.9));
-					stageCurtains.updateHitbox();
-					add(stageCurtains);
+					cerboro = new BGSprite('super-idol/CERBORO', -66.05, 593.75, 1, 1);
+					cerboro.updateHitbox();
 				}
 
 			case 'spooky': //Week 2
@@ -634,17 +628,10 @@ class PlayState extends MusicBeatState
 		}
 
 		add(gfGroup);
-
-		// Shitty layering but whatev it works LOL
-		if (curStage == 'limo')
-			add(limo);
-
 		add(dadGroup);
 		add(boyfriendGroup);
-		
-		if(curStage == 'spooky') {
-			add(halloweenWhite);
-		}
+
+		add(cerboro);
 
 		#if LUA_ALLOWED
 		luaDebugGroup = new FlxTypedGroup<DebugLuaText>();
@@ -1335,6 +1322,10 @@ class PlayState extends MusicBeatState
 					santa.dance(true);
 				}
 
+				if(curStage == 'stage' && !ClientPrefs.lowQuality) {
+					artists.dance(true);
+				}
+
 				switch (swagCounter)
 				{
 					case 0:
@@ -1424,6 +1415,15 @@ class PlayState extends MusicBeatState
 			}, 5);
 		}
 	}
+
+	function doFlash():Void
+		{
+			var flashValue:Int = 1;
+			if (ClientPrefs.flashing)
+				FlxG.camera.flash(FlxColor.WHITE, flashValue);
+			else
+				FlxG.camera.flash(FlxColor.BLACK, flashValue);
+		}
 
 	function startNextDialogue() {
 		dialogueCount++;
@@ -1969,9 +1969,9 @@ songSpeed = SONG.speed;
 		super.update(elapsed);
 
 		if(ratingString == '?') {
-			scoreTxt.text = 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Rating: ' + ratingString;
+			scoreTxt.text = 'Social Credit: ' + songScore + ' | Times You Offended The Chinese President: ' + songMisses + ' | Accuracy: ' + ratingString;
 		} else {
-			scoreTxt.text = 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Rating: ' + ratingString + ' (' + Math.floor(ratingPercent * 100) + '%)';
+			scoreTxt.text = 'Social Credit: ' + songScore + ' | Times You Offended The Chinese President: ' + songMisses + ' | Accuracy: ' + ratingString + ' (' + Math.floor(ratingPercent * 100) + '%)';
 		}
 
 		if(cpuControlled) {
@@ -2267,13 +2267,19 @@ songSpeed = SONG.speed;
 							case 3:
 								animToPlay = 'singRIGHT';
 						}
-						if(daNote.noteType == 'GF Sing') {
+						if(isGF) {
 							gf.playAnim(animToPlay + altAnim, true);
 							gf.holdTimer = 0;
 						} else {
 							dad.playAnim(animToPlay + altAnim, true);
 							dad.holdTimer = 0;
 						}
+
+						if (isDad) {
+							dad.playAnim(animToPlay + altAnim, true);
+							dad.holdTimer = 0;
+						}
+
 					}
 
 					if (SONG.needsVoices)
@@ -2764,9 +2770,74 @@ songSpeed = SONG.speed;
 						}
 				}
 				reloadHealthBarColors();
-			
+
 			case 'BG Freaks Expression':
 				if(bgGirls != null) bgGirls.swapDanceType();
+
+			case 'Opponent Anim':
+				var activeChar:Int = 0;
+				var gfSection:Int = Std.parseInt(value2);
+
+				switch(value1) {
+					case 'dad' | 'opponent' | 'superidol':
+						activeChar = 0;
+					case 'gf' | 'girlfriend' | 'gfidol':
+						activeChar = 1;
+					case 'both':
+						activeChar = 2;
+					default:
+						activeChar = Std.parseInt(value1);
+						if(Math.isNaN(activeChar)) activeChar = 0;
+				}
+
+				switch(activeChar) {
+					case 0:
+						isDad = true;
+						isGF = false;
+						gf.dance();
+
+					case 1:
+						isDad = false;
+						isGF = true;
+						dad.dance();
+
+					case 2:
+						isDad = true;
+						isGF = true;
+
+				}
+
+				switch (gfSection) {
+					case 0:
+						isCameraOnForcedPos = false;
+					case 1:
+						camFollow.set(gf.getMidpoint().x, gf.getMidpoint().y - 50);
+						//defaultCamZoom = 0.9;
+						isCameraOnForcedPos = true;
+				}
+
+			case 'Super Fade':
+				var fade:Int = Std.parseInt(value1);
+
+				blammedLightsBlackTween = FlxTween.tween(dad, {alpha: fade}, 1, {ease: FlxEase.quadInOut,
+					onComplete: function(twn:FlxTween) {
+						blammedLightsBlackTween = null;
+					}
+				});
+
+			case 'Super Flash':
+				var flashValue:Int = Std.parseInt(value1);
+
+				if (ClientPrefs.flashing)
+					FlxG.camera.flash(FlxColor.WHITE, flashValue);
+				else
+					FlxG.camera.flash(FlxColor.BLACK, flashValue);
+
+			case 'Zoom Amount':
+				var zoom:Float = Std.parseFloat(value1);
+
+				defaultCamZoom = zoom;
+
 		}
 		callOnLuas('onEvent', [eventName, value1, value2]);
 	}
@@ -2797,9 +2868,6 @@ songSpeed = SONG.speed;
 
 	var cameraTwn:FlxTween;
 	public function moveCamera(isDad:Bool) {
-		
-		
-		
 		if(isDad) {
 			camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
 			camFollow.x += dad.cameraPosition[0];
@@ -2956,7 +3024,7 @@ songSpeed = SONG.speed;
 					if(FlxTransitionableState.skipNextTransIn) {
 						CustomFadeTransition.nextCamera = null;
 					}
-					MusicBeatState.switchState(new StoryMenuState());
+					MusicBeatState.switchState(new CreditsState());
 
 					// if ()
 					if(!usedPractice) {
@@ -3851,6 +3919,10 @@ songSpeed = SONG.speed;
 
 		switch (curStage)
 		{
+			case 'stage':
+				if (!ClientPrefs.lowQuality) {
+					artists.dance(true);
+				}
 			case 'school':
 				if(!ClientPrefs.lowQuality) {
 					bgGirls.dance();

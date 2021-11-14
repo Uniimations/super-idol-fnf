@@ -19,7 +19,7 @@ class PauseSubState extends MusicBeatSubstate
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
 	var menuItems:Array<String> = [];
-	var menuItemsOG:Array<String> = ['Resume', 'Restart Song', 'Change Difficulty', 'Toggle Practice Mode', 'Botplay', 'Exit to menu'];
+	var menuItemsOG:Array<String> = ['Continue Working', 'Retake Quiz', 'Escape China'#if STREAMER_BUILD, 'HI CERBERA', 'HI ASH', 'FUCK YOU AMOR'#end];
 	var difficultyChoices = [];
 	var curSelected:Int = 0;
 
@@ -35,8 +35,8 @@ class PauseSubState extends MusicBeatSubstate
 		menuItems = menuItemsOG;
 
 		for (i in 0...CoolUtil.difficultyStuff.length) {
-			var diff:String = '' + CoolUtil.difficultyStuff[i][0];
-			difficultyChoices.push(diff);
+			difficultyChoices.push('YOU CAN\'T');
+			difficultyChoices.push('');
 		}
 		difficultyChoices.push('BACK');
 
@@ -157,7 +157,7 @@ class PauseSubState extends MusicBeatSubstate
 
 			switch (daSelected)
 			{
-				case "Resume":
+				case "Continue Working":
 					close();
 				case 'Change Difficulty':
 					menuItems = difficultyChoices;
@@ -166,7 +166,7 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.practiceMode = !PlayState.practiceMode;
 					PlayState.usedPractice = true;
 					practiceText.visible = PlayState.practiceMode;
-				case "Restart Song":
+				case "Retake Quiz":
 					CustomFadeTransition.nextCamera = transCamera;
 					MusicBeatState.resetState();
 					FlxG.sound.music.volume = 0;
@@ -174,7 +174,7 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.cpuControlled = !PlayState.cpuControlled;
 					PlayState.usedPractice = true;
 					botplayText.visible = PlayState.cpuControlled;
-				case "Exit to menu":
+				case "Escape China":
 					PlayState.deathCounter = 0;
 					PlayState.seenCutscene = false;
 					CustomFadeTransition.nextCamera = transCamera;
