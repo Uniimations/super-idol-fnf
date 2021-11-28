@@ -1969,9 +1969,9 @@ songSpeed = SONG.speed;
 		super.update(elapsed);
 
 		if(ratingString == '?') {
-			scoreTxt.text = 'Social Credit: ' + songScore + ' | Misses: ' + songMisses + ' | Accuracy: ' + ratingString;
+			scoreTxt.text = 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Accuracy: ' + ratingString;
 		} else {
-			scoreTxt.text = 'Social Credit: ' + songScore + ' | Misses: ' + songMisses + ' | Accuracy: ' + ratingString + ' (' + Math.floor(ratingPercent * 100) + '%)';
+			scoreTxt.text = 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Accuracy: ' + ratingString + ' (' + Math.floor(ratingPercent * 100) + '%)';
 		}
 
 		if(cpuControlled) {
